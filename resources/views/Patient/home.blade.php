@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Patient</title>
-</head>
-<body>
-
-</body>
-</html>
+@extends('layouts.default')
+@section('content')
+ <H1>This is section</H1>
+@endsection

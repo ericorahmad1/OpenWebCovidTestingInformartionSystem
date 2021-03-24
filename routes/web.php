@@ -18,9 +18,7 @@ Route::get('/', function () {
 });
 
 // Router For Patient
-Route::prefix('patient')->group(function () {
-    Route::get('/', 'homeController@patientHome')->name('patientHome');    
-});
+Route::get('/patient/', 'HomeController@patientHome')->name('patientHome');  
 
 
 // Route::group(['middleware' => 'role:super-admin'], function() {
