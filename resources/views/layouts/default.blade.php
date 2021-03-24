@@ -7,7 +7,8 @@
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
         @include('layouts.Part.header')
 
-        @include('content')
+        @yield('content')
     </div>
 </body>
+<script type="text/javascript" src="{{url('/assets/scripts/main.js')}}"></script></body>
 </html>
