@@ -15,9 +15,13 @@ class CreateCOVIDTestsTable extends Migration
     {
         Schema::create('covidtest', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('type');
-            $table->string('symptoms');
+            $table->foreignId('centre_office_id');
+            $table->foreignId('test_kit_id');
+            $table->foreignId('patient_id');
+            $table->string('test_id');
+            $table->date('test_date');
+            $table->string('result');
+            $table->string('status');
             $table->timestamps();
         });
     }
