@@ -178,7 +178,8 @@
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
                                     <div class="widget-content-left mr-3">
-                                        <div class="switch has-switch switch-container-class" data-class="fixed-footer">
+                                        <div class="switch has-switch switch-container-class" 
+                                            data-class="fixed-footer">
                                             <div class="switch-animate switch-off">
                                                 <input type="checkbox" data-toggle="toggle" data-onstyle="success">
                                             </div>
