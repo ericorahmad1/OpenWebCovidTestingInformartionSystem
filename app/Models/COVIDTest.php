@@ -24,8 +24,8 @@ class COVIDTest extends Model
         'test_kit_id',
         'patient_id',
         'test_id',
-        'TestDate',
-        'Result',
-        'Status',
+        'test_date',
+        'result',
+        'status',
     ];
 }
