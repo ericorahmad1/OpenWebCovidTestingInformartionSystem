@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => 'role:super-admin'], function() {
-
+// Router For Patient
+Route::prefix('patient')->group(function () {
+    Route::get('/', 'homeController@patientHome')->name('patientHome');    
 });
+
+
+// Route::group(['middleware' => 'role:super-admin'], function() {
+// });
