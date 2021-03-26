@@ -25,3 +25,7 @@ Route::get('/patient/', function () {
 
 // Route::group(['middleware' => 'role:super-admin'], function() {
 // });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
