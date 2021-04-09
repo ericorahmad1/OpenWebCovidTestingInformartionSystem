@@ -1,4 +1,4 @@
-@extends('layouts.manager')
+@extends('layouts.tester')
 @section('content')
     <div class="app-main__outer">
         <div class="app-main__inner">

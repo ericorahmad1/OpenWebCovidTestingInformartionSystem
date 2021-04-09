@@ -17,7 +17,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(auth()->user()->hasRole() != $role){
-            abort(404);
+            return redirect('/home');
         }
         return $next($request);
     }

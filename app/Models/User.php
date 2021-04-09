@@ -13,7 +13,7 @@ class User extends Authenticatable
     /**
      * The attributes to assign tabble name
      */
-    protected $table = 'User';
+    protected $table = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -21,9 +21,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username',
         'name',
+        'username',
         'password',
+        'as',
     ];
 
     /**
@@ -36,17 +37,32 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
     # Get User Id 
     public function getID(){
       return $this->id;
+    }
+
+    public function getAs(){
+        return $this->as;
+    }
+
+    /**
+     * Get the officer associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function officer()
+    {
+        return $this->hasOne(centre_officer::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the Patient associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function Patient()
+    {
+        return $this->hasOne(Patient::class, 'user_id', 'id');
     }
 }

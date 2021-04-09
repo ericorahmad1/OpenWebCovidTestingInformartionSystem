@@ -24,4 +24,17 @@ class centre_officer extends Model
         'test_centre_id',
         'position',
     ];
+
+    public $timestamps = false;
+
+    public function Users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function Centre()
+    {
+        return $this->belongsTo(test_centre::class, 'test_centre_id', 'id');
+    }
+
 }

@@ -45,20 +45,8 @@
             <ul class="header-menu nav">
                 <li class="nav-item">
                     <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-database"> </i>
-                        Statistics
-                    </a>
-                </li>
-                <li class="btn-group nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-edit"></i>
-                        Projects
-                    </a>
-                </li>
-                <li class="dropdown nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
-                        <i class="nav-link-icon fa fa-cog"></i>
-                        Settings
+                        <!-- <i class="nav-link-icon fa fa-database"> </i> -->
+                        Home
                     </a>
                 </li>
             </ul>        
@@ -81,36 +69,26 @@
                                         class="dropdown-item">
                                         User Account
                                     </button>
-                                    <button type="button" tabindex="0" 
+                                    <a href="{{url('/logout')}}" tabindex="0" 
                                         class="dropdown-item">
-                                        Settings
-                                    </button>
-                                    <h6 tabindex="-1" class="dropdown-header">
-                                        Header
-                                    </h6>
-                                    <button type="button" tabindex="0" class="dropdown-item">
-                                        Actions
-                                    </button>
-                                    <div tabindex="-1" class="dropdown-divider"></div>
-                                    <button type="button" tabindex="0" class="dropdown-item">
-                                        Dividers
-                                    </button>
+                                        Logout
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
-                                Alina Mclourd
+                                {{Auth::user()->name}}
                             </div>
                             <div class="widget-subheading">
-                                VP People Manager
+                                @if(Auth::user()->as == "Patient")
+                                    Patient
+                                @elseif(Auth::user()->as == "Manager")
+                                    Test Centre Manager
+                                @elseif(Auth::user()->as == "Tester")
+                                    Test Centre Tester
+                                @endif
                             </div>
-                        </div>
-                        <div class="widget-content-right header-user-info ml-3">
-                            <button type="button" 
-                                class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
-                                <i class="fa text-white fa-calendar pr-1 pl-1"></i>
-                            </button>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Patient;
+use App\Models\centre_officer;
+use App\Models\test_centre;
+use App\Models\COVIDTest;
 
 class HomeController extends Controller
 {
@@ -16,6 +23,14 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    public function logout() 
+    {
+        //logout user
+        auth()->logout();
+        // redirect to homepage
+        return redirect('/');
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -23,10 +38,53 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $thisUser = Auth::user()->getAs();
+        if($thisUser=="guest"){
+            return redirect('pickLevel');
+        }elseif($thisUser=="Patient"){
+            return redirect('Patient');
+        }elseif($thisUser=="Manager"){
+            return redirect('Manager');
+        }else{
+            return redirect('Tester/home');
+        }
     }
 
-    public function patientHome(){
+    public function formPick(){
+        return view('pickLevel');
+    }
+
+    public function Pick(Request $request){
+        $thisUser = Auth::user()->getID();
+        $request->validate([
+            'Pick' => 'required'
+        ]);
+        
+        if ($request->Pick=="Patient") {
+            $newPatient = new Patient;
+            $newPatient->user_id = $thisUser;
+            $newPatient->save();
+
+            $updateUser = User::find($thisUser);
+            $updateUser->as = $request->Pick;
+            $updateUser->save();
+            
+            return redirect('/home');
+        }
+    }
+
+    // patient  section
+    Public function patientHome(){
         return view('Patient/home');
+    }
+    // end patient  section
+
+    
+    // tester  section
+    
+    Public function testerHome(){
+        return view('Tester/home');
+    }
+    // end tester  section
     }
 }
