@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.manager')
 @section('content')
     <div class="app-main__outer">
         <div class="app-main__inner">
@@ -7,21 +7,21 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="main-card mb-6 card">
-                                <div class="card-header">Register
+                                <div class="card-header">New Tester
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="{{route('register')}}">
+                                    <form method="POST" action="#">
                                         @csrf
 
                                         <div class="form-group row">
                                             <label for="name" class="col-md-4 col-form-label text-md-right">
                                             {{ __('Name') }}
                                         </label>
+
                                             <div class="col-md-6">
                                                 <input id="name" type="text" 
                                                     class="form-control @error('name') is-invalid @enderror" name="name" 
-                                                    value="{{ old('name') }}" required 
-                                                    autocomplete="name" autofocus>
+                                                    value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                                 @error('name')
                                                     <span class="invalid-feedback" role="alert">
@@ -38,8 +38,7 @@
 
                                             <div class="col-md-6">
                                                 <input id="username" type="text" 
-                                                    class="form-control @error('username') 
-                                                        is-invalid @enderror" name="username" 
+                                                    class="form-control @error('username') is-invalid @enderror" name="username" 
                                                     value="{{ old('email') }}" required>
 
                                                 @error('username')
@@ -56,10 +55,7 @@
                                             </label>
 
                                             <div class="col-md-6">
-                                                <input id="password" type="password" 
-                                                    class="form-control @error('password') is-invalid @enderror"
-                                                    name="password" required 
-                                                    autocomplete="new-password">
+                                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                                                 @error('password')
                                                     <span class="invalid-feedback" role="alert">
