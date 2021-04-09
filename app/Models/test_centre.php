@@ -19,6 +19,7 @@ class test_centre extends Model
      *
      * @var array
      */
+    
     protected $fillable = [
         'name',
     ];

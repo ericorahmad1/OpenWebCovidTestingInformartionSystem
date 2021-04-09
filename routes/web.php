@@ -30,6 +30,23 @@ Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 
 Route::get('/pickLevel', [HomeController::class, 'formPick'])->name('pickLevel');
 Route::post('/pickLevel',  [HomeController::class, 'Pick'])->name('pick');
+Route::get('/Manager/new', [ManagerController::class, 'newManager'])->name('newManager');
+Route::post('/Manager/new', [ManagerController::class, 'saveManager'])->name('saveManager');
+
+Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(function () {
+    Route::get('/', [HomeController::class, 'Manager'])->name('Manager');
+    Route::get('/home', [HomeController::class, 'managerHome'])->name('managerHome');
+    Route::get('/test', [ManagerController::class, 'covidTest'])->name('covidTest');
+
+
+    Route::get('/testers/', [ManagerController::class, 'Testers'])->name('Testers');
+    Route::get('/testers/new', [ManagerController::class, 'newTesters'])->name('newTesters');
+    Route::post('/testers/new', [ManagerController::class, 'saveTesters'])->name('saveTesters');
+
+    Route::get('/testkits/', [ManagerController::class, 'testkits'])->name('testkits');
+    Route::get('/testkits/new', [ManagerController::class, 'newtestkits'])->name('newtestkits');
+    Route::post('/testkits/new', [ManagerController::class, 'savetestkits'])->name('savetestkits');
+});
 
 Route::prefix('Tester')->middleware(['middleware' => 'role:Tester'])->group(function () {
     Route::get('/', function () {

@@ -12,7 +12,7 @@ class Patient extends Model
     /**
      * The attributes to assign tabble name
      */
-    protected $table = 'Patient';
+    protected $table = 'patient';
 
     /**
      * The attributes that are mass assignable.
@@ -24,4 +24,11 @@ class Patient extends Model
         'type',
         'symptoms',
     ];
+    
+    public $timestamps = false;
+
+    public function Users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

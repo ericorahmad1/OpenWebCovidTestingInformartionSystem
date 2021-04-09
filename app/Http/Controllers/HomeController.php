@@ -70,8 +70,31 @@ class HomeController extends Controller
             $updateUser->save();
             
             return redirect('/home');
+        }else{
+            $updateUser = User::find($thisUser);
+            $updateUser->as = $request->Pick;
+            $updateUser->save();
+            return redirect('Manager/new');
         }
     }
+	
+	// manager section
+    
+    Public function Manager(){
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return redirect('Manager/new');
+        }else{
+            return redirect('Manager/home');
+        }
+    }
+
+	Public function managerHome(){
+        return view('Manager/home');
+    }
+    // end manager section 
 
     // patient  section
     Public function patientHome(){
