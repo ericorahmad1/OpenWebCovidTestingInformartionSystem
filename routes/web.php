@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagerController;
@@ -21,6 +22,9 @@ Route::get('/', function () {
 });
 
 
+// Route::group(['middleware' => 'role:super-admin'], function() {
+// });
+
 Auth::routes();
 
 
@@ -28,10 +32,12 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/logout', [HomeController::class, 'logout'])->name('logout');
 
+
 Route::get('/pickLevel', [HomeController::class, 'formPick'])->name('pickLevel');
 Route::post('/pickLevel',  [HomeController::class, 'Pick'])->name('pick');
 Route::get('/Manager/new', [ManagerController::class, 'newManager'])->name('newManager');
 Route::post('/Manager/new', [ManagerController::class, 'saveManager'])->name('saveManager');
+
 
 Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(function () {
     Route::get('/', [HomeController::class, 'Manager'])->name('Manager');
@@ -46,6 +52,12 @@ Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(fu
     Route::get('/testkits/', [ManagerController::class, 'testkits'])->name('testkits');
     Route::get('/testkits/new', [ManagerController::class, 'newtestkits'])->name('newtestkits');
     Route::post('/testkits/new', [ManagerController::class, 'savetestkits'])->name('savetestkits');
+
+    Route::get('/testkits/edit/{id}', [ManagerController::class, 'editTestkits'])->name('editTestkits');
+    Route::post('/testkits/edit/{id}', [ManagerController::class, 'updattestkits'])->name('updattestkits');
+
+    Route::get('/testkits/add', [ManagerController::class, 'addTestkits'])->name('addTestkits');
+    Route::post('/testkits/add', [ManagerController::class, 'addStock'])->name('addStock');
 });
 
 Route::prefix('Tester')->middleware(['middleware' => 'role:Tester'])->group(function () {
@@ -68,3 +80,4 @@ Route::prefix('Patient')->middleware(['middleware' => 'role:Patient'])->group(fu
     Route::get('/home', [HomeController::class, 'patientHome'])->name('patientHome');
     Route::get('/test/', [PatientController::class, 'covidTest'])->name('covidTest');
 });
+

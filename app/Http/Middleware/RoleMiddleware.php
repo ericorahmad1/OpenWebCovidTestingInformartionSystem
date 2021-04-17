@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Middleware;
+use Illuminate\Support\Facades\Auth;
 
 use Closure;
-use Illuminate\Http\Request;
 
 class RoleMiddleware
 {
@@ -14,11 +14,15 @@ class RoleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next, $role)
     {
-        if(auth()->user()->hasRole() != $role){
-            return redirect('/home');
+        if(Auth::user()){
+            if(auth()->user()->getAs() != $role){
+                return redirect('/home');
+            }
+            return $next($request);
+        }else{
+            return redirect('/');
         }
-        return $next($request);
     }
 }

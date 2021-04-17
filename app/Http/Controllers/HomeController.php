@@ -11,6 +11,7 @@ use App\Models\centre_officer;
 use App\Models\test_centre;
 use App\Models\COVIDTest;
 
+
 class HomeController extends Controller
 {
     /**
@@ -70,15 +71,16 @@ class HomeController extends Controller
             $updateUser->save();
             
             return redirect('/home');
-        }else{
+        } else{
             $updateUser = User::find($thisUser);
             $updateUser->as = $request->Pick;
             $updateUser->save();
             return redirect('Manager/new');
         }
     }
-	
-	// manager section
+
+
+    // manager section
     
     Public function Manager(){
         $thisUser = Auth::user()->getID();
@@ -91,7 +93,7 @@ class HomeController extends Controller
         }
     }
 
-	Public function managerHome(){
+    Public function managerHome(){
         return view('Manager/home');
     }
     // end manager section 
@@ -109,5 +111,4 @@ class HomeController extends Controller
         return view('Tester/home');
     }
     // end tester  section
-    }
 }
