@@ -22,7 +22,7 @@
                                         <tbody>
                                         @foreach($tests as $index => $thisTest)
                                         <tr>
-                                            <th scope="row">{{$index}}</th>
+                                            <th scope="row">{{$index+1}}</th>
                                             <td>{{$thisTest->Patients->Users->name}}</td>
                                             <td>{{$thisTest->test_date}}</td>
                                             <td>{{$thisTest->result}}</td>

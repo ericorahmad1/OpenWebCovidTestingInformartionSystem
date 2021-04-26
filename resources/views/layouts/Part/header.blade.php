@@ -1,6 +1,8 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
+        <a href="{{url('/')}}">
         <div class="logo-src"></div>
+        </a>
         <div class="header__pane ml-auto">
             <div>
                 <button type="button" 
