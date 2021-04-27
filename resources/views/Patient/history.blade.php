@@ -27,7 +27,7 @@
                                             <td>{{$thisTest->Kits->name}}</td>
                                             <td>{{$thisTest->result}}</td>
                                             <td>{{$thisTest->status}}</td>
-                                            <td>{{$thisTest->Office->Name}}</td>
+                                            <td>{{$thisTest->Centre->Name}}</td>
                                         </tr>
                                         @endforeach
                                         </tbody>
