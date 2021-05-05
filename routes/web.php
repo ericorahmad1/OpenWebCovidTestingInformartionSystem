@@ -61,6 +61,7 @@ Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(fu
 });
 
 Route::prefix('Tester')->middleware(['middleware' => 'role:Tester'])->group(function () {
+    Route::get('/profile', [TesterController::class, 'profileTester'])->name('profileTester');
     Route::get('/', function () {
         return view('/Tester/home');
     });
@@ -68,6 +69,9 @@ Route::prefix('Tester')->middleware(['middleware' => 'role:Tester'])->group(func
     Route::get('/test/', [TesterController::class, 'covidTest'])->name('covidTest');
     Route::get('/test/new', [TesterController::class, 'newTest'])->name('newTest');
     Route::post('/test/new', [TesterController::class, 'saveTest'])->name('saveTest');
+    Route::get('/test/{id}', [TesterController::class, 'updateTestForm'])->name('updateTestForm');
+    Route::post('/test/{id}', [TesterController::class, 'updateTest'])->name('updateTest');
+
 
     Route::get('/test/result/{id}', [TesterController::class, 'newResult'])->name('newResult');
     Route::post('/test/result/{id}', [TesterController::class, 'saveResult'])->name('saveResult');
