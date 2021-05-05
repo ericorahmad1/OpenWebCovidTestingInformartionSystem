@@ -40,6 +40,8 @@ Route::post('/Manager/new', [ManagerController::class, 'saveManager'])->name('sa
 
 
 Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(function () {
+    Route::get('/profile', [ManagerController::class, 'profileManager'])->name('profileManager');
+
     Route::get('/', [HomeController::class, 'Manager'])->name('Manager');
     Route::get('/home', [HomeController::class, 'managerHome'])->name('managerHome');
     Route::get('/test', [ManagerController::class, 'covidTest'])->name('covidTest');
@@ -48,6 +50,7 @@ Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(fu
     Route::get('/testers/', [ManagerController::class, 'Testers'])->name('Testers');
     Route::get('/testers/new', [ManagerController::class, 'newTesters'])->name('newTesters');
     Route::post('/testers/new', [ManagerController::class, 'saveTesters'])->name('saveTesters');
+    Route::get('/testers/{id}/delete', [ManagerController::class, 'deleteTesters'])->name('deleteTesters');
 
     Route::get('/testkits/', [ManagerController::class, 'testkits'])->name('testkits');
     Route::get('/testkits/new', [ManagerController::class, 'newtestkits'])->name('newtestkits');
@@ -55,6 +58,8 @@ Route::prefix('Manager')->middleware(['middleware' => 'role:Manager'])->group(fu
 
     Route::get('/testkits/edit/{id}', [ManagerController::class, 'editTestkits'])->name('editTestkits');
     Route::post('/testkits/edit/{id}', [ManagerController::class, 'updattestkits'])->name('updattestkits');
+    Route::get('/testkits/edit/{id}/delete', [ManagerController::class, 'deletekit'])->name('deletekit');
+
 
     Route::get('/testkits/add', [ManagerController::class, 'addTestkits'])->name('addTestkits');
     Route::post('/testkits/add', [ManagerController::class, 'addStock'])->name('addStock');
