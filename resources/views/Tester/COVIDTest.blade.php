@@ -11,12 +11,12 @@
                                     <table class="mb-0 table table-hover">
                                         <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
                                             <th>Patient</th>
                                             <th>Test date</th>
                                             <th>Results</th>
                                             <th>Status</th>
-                                            <th>#</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -30,6 +30,9 @@
                                             <td>
                                                 <a href="{{url('/Tester/test/result/'.$thisTest->id)}}" class="btn btn-primary">
                                                     Result
+                                                </a>
+                                                <a href="{{url('/Tester/test/'.$thisTest->id)}}" class="btn btn-warning">
+                                                    Edit
                                                 </a>
                                             </td>
                                         </tr>
