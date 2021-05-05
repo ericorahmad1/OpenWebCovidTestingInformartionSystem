@@ -10,6 +10,7 @@
             @include('layouts.Part.manager.sidebar')
             @yield('content')
         </div>
+        @include('layouts.Part.alert.modelManager')
     </div>
 </body>
 <script type="text/javascript" src="{{url('/assets/scripts/main.js')}}"></script>
