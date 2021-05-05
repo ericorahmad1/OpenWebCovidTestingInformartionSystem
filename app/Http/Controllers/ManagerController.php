@@ -13,7 +13,22 @@ use App\Models\COVIDTest;
 
 class ManagerController extends Controller
 {
-    //
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function profileManager(){
+        $thisUser = Auth::user()->getID();
+        $officer = centre_officer::where('user_id', '=', $thisUser)
+            ->first();
+        return view('Manager/profile', ['officer'=>$officer]);
+    }
 
     public function newManager(){
         $thisUser = Auth::user()->getID();
@@ -35,7 +50,7 @@ class ManagerController extends Controller
         ]);
 
         $newCentre = new test_centre;
-        $newCentre->name = $request->name;
+        $newCentre->Name = $request->name;
         $newCentre->save();
 
         $newOfficer = new centre_officer;
@@ -49,16 +64,30 @@ class ManagerController extends Controller
 
     public function covidTest()
     {
-        $this_centre_officer = Auth::user()->officer->test_centre_id;
-        $tests = COVIDTest::where('centre_office_id', '=', $this_centre_officer)
-            ->get();
-        return view('Manager/COVIDTest', ['tests'=>$tests]);
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }else{
+            $this_centre_officer = Auth::user()->officer->test_centre_id;
+            $tests = COVIDTest::where('centre_office_id', '=', $this_centre_officer)->get();
+            return view('Manager/COVIDTest', ['tests'=>$tests]);
+        }
     }
 
     public function Testers()
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $Testers = centre_officer::where('test_centre_id','=',$this_centre_officer)
+            ->where('status','=','Active')
             ->wherehas('Users',function($q){
                 $q->where('as','=','Tester');
             })
@@ -68,6 +97,13 @@ class ManagerController extends Controller
 
     public function newTesters()
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
         return view('Manager/testerNew');
     }
 
@@ -78,7 +114,9 @@ class ManagerController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:40'],
             'username' => ['required', 'string', 'max:30', 'unique:user'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'gender' => ['required'],
+            'address' => ['required'],
         ]);
 
         $this_centre_officer = centre_officer::where('user_id', '=', $thisUser)
@@ -86,6 +124,8 @@ class ManagerController extends Controller
 
         $newUser = new User;
         $newUser->name = $request->name;
+        $newUser->gender = $request->gender;
+        $newUser->address = $request->address;
         $newUser->username = $request->username;
         $newUser->password = Hash::make($request->password);
         $newUser->save();
@@ -100,11 +140,18 @@ class ManagerController extends Controller
         $updateUser->as = "Tester";
         $updateUser->save();
         
-        return redirect('Manager/testers');
+        return redirect('Manager/testers')->with('success', 'newTester');
     }
 
     public function testkits()
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $Kits = test_kit::where('test_centre_id','=',$this_centre_officer)
             ->where('available','>',0)
@@ -114,6 +161,13 @@ class ManagerController extends Controller
 
     public function newtestkits()
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
         return view('Manager/newTestkit');
     }
 
@@ -123,7 +177,7 @@ class ManagerController extends Controller
         
         $request->validate([
             'name' => ['required'],
-            'Quantity' => ['required', 'numeric'],
+            'Quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
         $newKit = new test_kit;
@@ -132,15 +186,46 @@ class ManagerController extends Controller
         $newKit->available = $request->Quantity;
         $newKit->save();
         
-        return redirect('Manager/testkits');
+        return redirect('Manager/testkits')->with('success', 'newKit');
     }
 
 
     public function editTestkits($id)
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
         $this_centre_officer = Auth::user()->officer->test_centre_id;
-        $Kits = test_kit::find($id);
+        $count_Kits = test_kit::where('id','=', $id)
+            ->where('test_centre_id', '=', $this_centre_officer)
+            ->get()->count();
+        if($count_Kits == 0){
+            return redirect('/');
+        }
+
+        $Kits = test_kit::where('id','=', $id)
+            ->where('test_centre_id', '=', $this_centre_officer)
+            ->first();    
         return view('Manager/editTest', ['Kits'=>$Kits]);
+    }
+
+    public function deleteTesters($id){
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+
+        $officer = centre_officer::find($id);
+        $officer->status = 'Deactivated';
+        $officer->save();
+        
+        return redirect('Manager/testers')->with('success', 'deleteTester');
     }
 
     public function updattestkits(Request $request ,$id)
@@ -148,20 +233,38 @@ class ManagerController extends Controller
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $request->validate([
             'name' => ['required'],
-            'Quantity' => ['required', 'numeric'],
+            'Quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
         $Kits = test_kit::find($id);
         $Kits->name = $request->name;
         $Kits->available = $request->Quantity;
         $Kits->save();
-        return redirect('Manager/testkits');
+        return redirect('Manager/testkits')->with('success', 'editKit');
+    }
+
+    public function deletekit($id)
+    {
+        $this_centre_officer = Auth::user()->officer->test_centre_id;
+
+        $Kits = test_kit::find($id);
+        $Kits->available = -1 ;
+        $Kits->save();
+        return redirect('Manager/testkits')->with('success', 'DeleteKit');
     }
 
     public function addTestkits()
     {
+        $thisUser = Auth::user()->getID();
+        $count_centre_officer = centre_officer::where('user_id', '=', $thisUser)
+            ->get()->count();
+        if($count_centre_officer == 0){
+            return view('Manager/managerNew');
+        }
+        
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $Kits = test_kit::where('test_centre_id','=',$this_centre_officer)
+            ->where('available','>',0)
             ->get();
         return view('Manager/addTest', ['Kits'=>$Kits]);
     }
@@ -170,12 +273,12 @@ class ManagerController extends Controller
     {
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $request->validate([
-            'Quantity' => ['required', 'numeric'],
+            'Quantity' => ['required', 'numeric', 'min:1'],
         ]);
 
         $Kits = test_kit::find($request->Kits);
         $Kits->available = $Kits->available + $request->Quantity;
         $Kits->save();
-        return redirect('Manager/testkits');
+        return redirect('Manager/testkits')->with('success', 'StockKit');
     }
 }
