@@ -39,8 +39,8 @@ class COVIDTest extends Model
         return $this->belongsTo(test_kit::class, 'test_kit_id', 'id');
     }
 
-    public function Office()
+    public function Centre()
     {
-        return $this->belongsTo(centre_office::class, 'centre_office_id', 'id');
+        return $this->belongsTo(test_centre::class, 'centre_office_id', 'id');
     }
 }

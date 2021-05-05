@@ -50,7 +50,8 @@ class ManagerController extends Controller
     public function covidTest()
     {
         $this_centre_officer = Auth::user()->officer->test_centre_id;
-        $tests = COVIDTest::where('centre_office_id', '=', $this_centre_officer)->get();
+        $tests = COVIDTest::where('centre_office_id', '=', $this_centre_officer)
+            ->get();
         return view('Manager/COVIDTest', ['tests'=>$tests]);
     }
 
@@ -106,6 +107,7 @@ class ManagerController extends Controller
     {
         $this_centre_officer = Auth::user()->officer->test_centre_id;
         $Kits = test_kit::where('test_centre_id','=',$this_centre_officer)
+            ->where('available','>',0)
             ->get();
         return view('Manager/test', ['Kits'=>$Kits]);
     }
