@@ -12,6 +12,13 @@ use App\Models\COVIDTest;
 
 class TesterController extends Controller
 {
+    public function profileTester(){
+        $thisUser = Auth::user()->getID();
+        $officer = centre_officer::where('user_id', '=', $thisUser)
+            ->first();
+        return view('Tester/profile', ['officer'=>$officer]);
+    }
+
     public function covidTest()
     {
         $this_centre_officer = Auth::user()->officer->test_centre_id;
@@ -38,7 +45,7 @@ class TesterController extends Controller
         $request->validate([
             'Patient' => 'required',
             'Kits' => 'required',
-            'symptoms' => 'required',
+            'symptoms' => ['required', 'max:200', 'min:1'],
             'Type' => 'required',
         ]);
 
@@ -60,12 +67,66 @@ class TesterController extends Controller
         $Kits->available = $Kits->available -1;
         $Kits->save();
         
-        return redirect('Tester/home');
+        return redirect('Tester/test')->with('success', 'newCOVIDTest');
+    }
+
+    public function updateTestForm($id)
+    {   
+        $this_centre_officer = Auth::user()->officer->test_centre_id;
+        $Kits = test_kit::where('test_centre_id', '=', $this_centre_officer)
+            ->where('available','>', 15)
+            ->get();
+
+        $count_Test = COVIDTest::where('id','=', $id)
+            ->where('centre_office_id', '=', $this_centre_officer)
+            ->get()->count();
+
+        if($count_Test == 0){
+            return redirect('/');
+        }
+        
+        $COVIDTest = COVIDTest::where('id','=', $id)
+            ->where('centre_office_id', '=', $this_centre_officer)
+            ->first();
+        
+        return view('Tester/update', ['COVIDTest'=>$COVIDTest,'Kits'=>$Kits]);
+    }
+
+    public function updateTest(Request $request, $id)
+    {
+        $request->validate([
+            'Kits' => 'required',
+            'symptoms' => ['required', 'max:200', 'min:1'],
+            'Type' => 'required',
+        ]);
+
+        $thisCOVIDTest = COVIDTest::find($id);
+        $thisCOVIDTest->test_kit_id = $request->Kits;
+        $thisCOVIDTest->save();
+
+        $updatePatient = Patient::find($thisCOVIDTest->patient_id);
+        $updatePatient->symptoms = $request->symptoms;
+        $updatePatient->type = $request->Type;
+        $updatePatient->save();
+        
+        return redirect('Tester/test')->with('success', 'updateCOVIDTest');
     }
 
     public function newResult($id)
-    {
-        $thisCOVIDTest = COVIDTest::find($id);
+    {   
+        $this_centre_officer = Auth::user()->officer->test_centre_id;
+        $count_Test = COVIDTest::where('id','=', $id)
+            ->where('centre_office_id', '=', $this_centre_officer)
+            ->get()->count();
+
+        if($count_Test == 0){
+            return redirect('/');
+        }
+        
+        $thisCOVIDTest = COVIDTest::where('id','=', $id)
+            ->where('centre_office_id', '=', $this_centre_officer)
+            ->first();
+
         return view('Tester/result',['thisCOVIDTest'=>$thisCOVIDTest]);
     }
 
@@ -83,6 +144,6 @@ class TesterController extends Controller
         $updateThis->result = $request->result;
         $updateThis->status = $request->status;
         $updateThis->save();
-        return redirect('Tester/home');
+        return redirect('Tester/test')->with('success', 'updateResult');
     }
 }
