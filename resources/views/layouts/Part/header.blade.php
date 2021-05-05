@@ -1,7 +1,7 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <a href="{{url('/')}}">
-        <div class="logo-src"></div>
+            <div class="logo-src"></div>
         </a>
         <div class="header__pane ml-auto">
             <div>
@@ -37,16 +37,9 @@
     </div>      
     <div class="app-header__content">
         <div class="app-header-left">
-            <div class="search-wrapper">
-                <div class="input-holder">
-                    <input type="text" class="search-input" placeholder="Type to search">
-                    <button class="search-icon"><span></span></button>
-                </div>
-                <button class="close"></button>
-            </div>
             <ul class="header-menu nav">
                 <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
+                    <a href="{{url('/')}}" class="nav-link">
                         <!-- <i class="nav-link-icon fa fa-database"> </i> -->
                         Home
                     </a>
@@ -67,10 +60,17 @@
                                 </a>
                                 <div tabindex="-1" role="menu" aria-hidden="true" 
                                     class="dropdown-menu dropdown-menu-right">
-                                    <button type="button" tabindex="0" 
+                                    <a tabindex="0" 
+                                        @if(Auth::user()->as == "Patient")
+                                            href="{{url('/Patient/profile')}}"
+                                        @elseif(Auth::user()->as == "Manager")
+                                            href="{{url('/Manager/profile')}}"
+                                        @elseif(Auth::user()->as == "Tester")
+                                            href="{{url('/Tester/profile')}}"
+                                        @endif 
                                         class="dropdown-item">
                                         User Account
-                                    </button>
+                                    </a>
                                     <a href="{{url('/logout')}}" tabindex="0" 
                                         class="dropdown-item">
                                         Logout
