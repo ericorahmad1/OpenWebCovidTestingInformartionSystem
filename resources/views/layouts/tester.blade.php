@@ -10,6 +10,7 @@
             @include('layouts.Part.tester.sidebar')
             @yield('content')
         </div>
+        @include('layouts.Part.alert.modelTester')
     </div>
 </body>
 <script type="text/javascript" src="{{url('/assets/scripts/main.js')}}"></script>
